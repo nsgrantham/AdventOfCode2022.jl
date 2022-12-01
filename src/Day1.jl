@@ -3,19 +3,19 @@ module Day1
 using AdventOfCode2022
 
 function solve(input=pkgdir(AdventOfCode2022, "data", "Day1.txt"))
-    x = Int[]
-    s = 0
+    elves = Int[]
+    calories = 0
     for line in eachline(input)
         if line == ""
-            push!(x, s)
-            s = 0
-            continue
+            push!(elves, calories)
+            calories = 0
+        else
+            calories += parse(Int, line)
         end
-        s += parse(Int, line)
     end
-    push!(x, s)
-    p1 = maximum(x)
-    p2 = sum(sort(x, rev=true)[1:3])
+    push!(elves, calories)
+    p1 = maximum(elves)
+    p2 = sum(partialsort!(elves, 1:3, rev=true))
     p1, p2
 end
 
