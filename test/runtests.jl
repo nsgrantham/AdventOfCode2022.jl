@@ -20,6 +20,17 @@ using Test
         10000
         """
     )
-
     @test AdventOfCode2022.Day1.solve(example) == (24000, 45000)
 end
+
+@testset "Day 2" begin
+    example = IOBuffer(
+        """
+        A Y
+        B X
+        C Z
+        """
+    )
+    @test AdventOfCode2022.Day2.solve(example) == (15, 12)
+end
+
