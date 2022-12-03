@@ -12,15 +12,15 @@ priority(item::Char) = islowercase(item) ? item - 'a' + 1 : item - 'A' + 27
 function solve(input=pkgdir(AdventOfCode2022, "data", "Day3.txt"))
     rucksacks = readlines(input)
 
-    p1 = 0
-    for rucksack in rucksacks
-        p1 += priority(only(intersect(compartments(rucksack)...)))
-    end
+    p1 = sum(
+        priority(only(intersect(compartments(rucksack)...)))
+        for rucksack in rucksacks
+    )
 
-    p2 = 0
-    for group in Iterators.partition(rucksacks, 3)
-        p2 += priority(only(intersect(group...)))
-    end
+    p2 = sum(
+        priority(only(intersect(group...)))
+        for group in Iterators.partition(rucksacks, 3)
+    )
 
     p1, p2
 end
