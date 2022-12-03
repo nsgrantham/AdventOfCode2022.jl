@@ -2,23 +2,16 @@ module Day3
 
 using AdventOfCode2022
 
-function compartments(rucksack::String)
-    mid = div(length(rucksack), 2)
-    rucksack[1:mid], rucksack[mid+1:end]
-end
+compartments(rucksack) = rucksack[1:div(end,2)], rucksack[div(end,2)+1:end]
 
-priority(item::Char) = islowercase(item) ? item - 'a' + 1 : item - 'A' + 27
+priority(item) = islowercase(item) ? item - 'a' + 1 : item - 'A' + 27
+
+find_shared_item_priority(packs) = priority(only(intersect(packs...)))
 
 function solve(input=pkgdir(AdventOfCode2022, "data", "Day3.txt"))
     rucksacks = readlines(input)
-    p1 = sum(
-        priority(only(intersect(compartments(rucksack)...)))
-        for rucksack in rucksacks
-    )
-    p2 = sum(
-        priority(only(intersect(group...)))
-        for group in Iterators.partition(rucksacks, 3)
-    )
+    p1 = sum(find_shared_item_priority, compartments.(rucksacks))
+    p2 = sum(find_shared_item_priority, Iterators.partition(rucksacks, 3))
     p1, p2
 end
 
