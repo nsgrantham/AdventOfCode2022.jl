@@ -34,3 +34,16 @@ end
     @test AdventOfCode2022.Day2.solve(example) == (15, 12)
 end
 
+@testset "Day 3" begin
+    example = IOBuffer(
+        """
+        vJrwpWtwJgWrhcsFMMfFFhFp
+        jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+        PmmdzqPrVvPwwTWBwg
+        wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+        ttgJtRGJQctTZtZT
+        CrZsJsPPZsGzwwsLwLmpwMDw
+        """
+    )
+    @test AdventOfCode2022.Day3.solve(example) == (157, 70)
+end
