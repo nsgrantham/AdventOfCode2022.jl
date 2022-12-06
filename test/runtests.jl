@@ -78,3 +78,17 @@ move 1 from 1 to 2
     )
     @test AdventOfCode2022.Day5.solve(example) == ("CMZ", "MCD")
 end
+
+@testset "Day 6" begin
+    example1 = "mjqjpqmgbljsphdztnvjfqwrcgsmlb"
+    example2 = "bvwbjplbgvbhsrlpgdmjqwftvncz"
+    example3 = "nppdvjthqldpwncqszvftbrmjlhg"
+    example4 = "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"
+    example5 = "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"
+
+    @test AdventOfCode2022.Day6.solve(IOBuffer(example1)) == (7, 19)
+    @test AdventOfCode2022.Day6.solve(IOBuffer(example2)) == (5, 23)
+    @test AdventOfCode2022.Day6.solve(IOBuffer(example3)) == (6, 23)
+    @test AdventOfCode2022.Day6.solve(IOBuffer(example4)) == (10, 29)
+    @test AdventOfCode2022.Day6.solve(IOBuffer(example5)) == (11, 26)
+end
