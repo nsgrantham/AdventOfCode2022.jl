@@ -1,34 +1,30 @@
+module Day7
+
 using AdventOfCode2022
 
-input=pkgdir(AdventOfCode2022, "data", "Day7.txt")
-
-dirs = Dict("/" => 0)
-pwd = "/"
-for line in readlines(input)[2:end]
-    startswith(line, "\\\$ ls") && continue
-    if startswith(line, "\\\$ cd")
-        _, _, dest = split(line)
-        if dest == ".."
-            pwd = splitdir(pwd)[1]
+function solve(input=pkgdir(AdventOfCode2022, "data", "Day7.txt"))
+    total_size = Dict{String, Int}()
+    pwd = ""
+    for line in eachline(input)
+        startswith(line, "\$ ls") && continue
+        startswith(line, "dir") && continue
+        if startswith(line, "\$ cd")
+            dir = last(split(line))
+            pwd = dir == ".." ? first(splitdir(pwd)) : joinpath(pwd, dir)
         else
-            pwd = joinpath(pwd, dest)
+            file_size = parse(Int, first(split(line)))
+            total_size[pwd] = get(total_size, pwd, 0) + file_size
+            parent, base = splitdir(pwd)
+            while base != ""
+                total_size[parent] = get(total_size, parent, 0) + file_size
+                parent, base = splitdir(parent)
+            end
         end
-        continue
     end
-    if startswith(line, "dir")
-        _, child = split(line, " ")
-        dirs[joinpath(pwd, child)] = 0
-        continue
-    end
-    size, _ = split(line, " ")
-    dirs[pwd] += parse(Int, size)
-    parent, base = splitdir(pwd)
-    while base != ""
-        dirs[parent] += parse(Int, size)
-        parent, base = splitdir(parent)
-    end
+    p1 = sum(filter(<(100_000), collect(values(total_size))))
+    min_delete_size = total_size["/"] + 30_000_000 - 70_000_000
+    p2 = minimum(filter(>=(min_delete_size), collect(values(total_size))))
+    p1, p2
 end
 
-sum(v for (k, v) in filter(p -> p[2] < 100000, dirs))
-
-minimum(values(filter(p -> p[2] > dirs["/"] + 30000000 - 70000000, dirs)))
+end
