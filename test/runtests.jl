@@ -121,3 +121,26 @@ end
     """
     @test AdventOfCode2022.Day7.solve(IOBuffer(example)) == (95437, 24933642)
 end
+
+@testset "Day 9" begin
+    example1 = """
+R 4
+U 4
+L 3
+D 1
+R 4
+D 1
+L 5
+R 2"""
+    example2 = """
+R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20"""
+    @test AdventOfCode2022.Day9.solve(IOBuffer(example1)) == (13, 1)
+    @test AdventOfCode2022.Day9.solve(IOBuffer(example2)) == (88, 36)
+end
