@@ -364,6 +364,14 @@ end
     @test AdventOfCode2022.Day13.solve(IOBuffer(example)) == (13, 140)
 end
 
+@testset "Day 14" begin
+    example = """
+498,4 -> 498,6 -> 496,6
+503,4 -> 502,4 -> 502,9 -> 494,9
+"""
+    @test AdventOfCode2022.Day14.solve(IOBuffer(example)) == (24, 93)
+end
+
 @testset "Day 15" begin
     example = """Sensor at x=2, y=18: closest beacon is at x=-2, y=15
 Sensor at x=9, y=16: closest beacon is at x=10, y=16

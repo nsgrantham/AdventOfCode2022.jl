@@ -5,28 +5,28 @@ using AdventOfCode2022
 mutable struct Monkey
     items::Vector{Int}
     inspections::Int
-    const op::Function
+    const inspect_op::Function
     const test_divisor::Int
-    const throw_to_true::Int
-    const throw_to_false::Int
+    const throw_to_if_true::Int
+    const throw_to_if_false::Int
 end
 
 function Base.parse(::Type{Monkey}, lines)
     items = parse.(Int, split(only(match(r"Starting items: ([\d\s,]+)", lines[2])), ", "))
-    op = eval(Meta.parse("old -> " * only(match(r"new = (.+)", lines[3]))))
+    inspect_op = eval(Meta.parse("old -> " * only(match(r"new = (.+)", lines[3]))))
     test_divisor = parse(Int, only(match(r"divisible by (\d+)", lines[4])))
-    throw_to_true = parse(Int, only(match(r"monkey (\d+)", lines[5]))) + 1
-    throw_to_false = parse(Int, only(match(r"monkey (\d+)", lines[6]))) + 1
-    Monkey(items, 0, op, test_divisor, throw_to_true, throw_to_false)
+    throw_to_if_true = parse(Int, only(match(r"monkey (\d+)", lines[5]))) + 1
+    throw_to_if_false = parse(Int, only(match(r"monkey (\d+)", lines[6]))) + 1
+    Monkey(items, 0, inspect_op, test_divisor, throw_to_if_true, throw_to_if_false)
 end
 
 function inspect(monkey::Monkey, item::Int)
     monkey.inspections += 1
-    Base.invokelatest(monkey.op, item)  # avoids potential world age issues because `op` is dynamically defined
+    Base.invokelatest(monkey.inspect_op, item)  # avoid "world age" issues because `inspect_op` is dynamically defined
 end
 
 function throw_to(monkey::Monkey, item::Int)
-    item % monkey.test_divisor == 0 ? monkey.throw_to_true : monkey.throw_to_false
+    item % monkey.test_divisor == 0 ? monkey.throw_to_if_true : monkey.throw_to_if_false
 end
 
 function monkey_business(monkeys::Vector{Monkey})
