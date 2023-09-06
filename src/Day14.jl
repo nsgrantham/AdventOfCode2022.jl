@@ -8,8 +8,6 @@ struct Sand
     y::Int
 end
 
-#Base.:+(a::Sand, b::Sand) = Sand(a.x + b.x, a.y + b.y)
-
 Base.isequal(a::Sand, b::Sand) = a.x == b.x && a.y == b.y
 
 
@@ -56,6 +54,7 @@ end
 function is_falling_forever(sand::Sand, cavern::Cavern)
     cavern.has_floor ? false : sand.y >= cavern.max_depth
 end
+
 
 function drop_sand!(cavern::Cavern, sand::Sand)
     prev = sand
