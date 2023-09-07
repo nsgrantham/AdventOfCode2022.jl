@@ -1,146 +1,81 @@
+module Day8
+
 using AdventOfCode2022
 
-example = """
-30373
-25512
-65332
-33549
-35390
-"""
 
-input = pkgdir(AdventOfCode2022, "data", "Day8.txt")
+const Trees = Matrix{Int}
 
-const TreeMap = Dict{CartesianIndex{2}, Int}
-
-function Base.parse(::Type{TreeMap}, lines::Vector{String})
-    heights = parse.(Int, permutedims(hcat(collect.(lines)...)))
-    TreeMap(Dict(zip(CartesianIndices(heights), heights)))
+function Base.parse(::Type{Trees}, lines::Vector{String})
+    Trees(parse.(Int, permutedims(hcat(collect.(lines)...))))
 end
 
-function is_visible_up(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((-i, 0)), -1)
-        neighbor < 0 && break # off grid
-        height <= neighbor && return false
-        i += 1
+
+function count_visible(trees::Trees)
+    m, n = size(trees)
+    m == 2 || n == 2 && return m * n
+    
+    num_not_visible = 0
+
+    for (i, tree) in pairs(trees)
+        x, y = Tuple(i)
+          
+        (x == 1 || y == 1 || x == m || y == n) && continue
+
+        u = view(trees, 1:(x-1), y:y)
+        d = view(trees, (x+1):m, y:y)
+        l = view(trees, x:x, 1:(y-1))
+        r = view(trees, x:x, (y+1):n)
+        
+        all(<(tree), u) && continue
+        all(<(tree), d) && continue
+        all(<(tree), l) && continue
+        all(<(tree), r) && continue
+        
+        num_not_visible += 1
     end
-    true
+
+    m * n - num_not_visible
 end
 
-function is_visible_down(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((i, 0)), -1)
-        neighbor < 0 && break # off grid
-        height <= neighbor && return false
-        i += 1
-    end
-    true
-end
 
-function is_visible_left(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((0, -i)), -1)
-        neighbor < 0 && break # off grid
-        height <= neighbor && return false
-        i += 1
-    end
-    true
-end
+function scenic_scores(trees::Trees)
+    m, n = size(trees)
+    scores = ones(Int, m, n)
 
-function is_visible_right(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((0, i)), -1)
-        neighbor < 0 && break # off grid
-        height <= neighbor && return false
-        i += 1
-    end
-    true
-end
-
-function find_visible_trees(treemap::TreeMap)
-    s = 0
-    for (point, height) in treemap
-        if is_visible_up(treemap, point, height)
-            s += 1
+    for (i, tree) in pairs(trees)
+        x, y = Tuple(i)
+        
+        if x == 1 || y == 1 || x == m || y == n
+            scores[i] = 0
             continue
         end
-        if is_visible_down(treemap, point, height)
-            s += 1
-            continue
+          
+        tree_lines = [
+            reverse(view(trees, 1:(x-1), y:y)),
+            view(trees, (x+1):m, y:y),
+            reverse(view(trees, x:x, 1:(y-1))),
+            view(trees, x:x, (y+1):n)
+        ]
+        
+        for tree_line in tree_lines
+            seen = 0
+            for next_nearest_tree in tree_line
+                seen += 1
+                tree <= next_nearest_tree && break
+            end
+            scores[i] *= seen
         end
-        if is_visible_right(treemap, point, height)
-            s += 1
-            continue
-        end
-        if is_visible_left(treemap, point, height)
-            s += 1
-            continue
-        end
     end
-    s
+    
+    scores
 end
 
 
-function find_scenic_score(tree, treemap)
-    point, height = tree
-    u = count_visible_up(treemap, point, height)
-    d = count_visible_down(treemap, point, height)
-    r = count_visible_right(treemap, point, height)
-    l = count_visible_left(treemap, point, height)
-    u * d * r * l
+function solve(input=pkgdir(AdventOfCode2022, "data", "Day8.txt"))
+    trees = parse(Trees, readlines(input))
+    p1 = count_visible(trees)
+    p2 = maximum(scenic_scores(trees))
+    p1, p2
 end
 
-function count_visible_up(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((-i, 0)), -1)
-        neighbor < 0 && return i - 1
-        neighbor >= height && return i
-        i += 1
-    end
 end
-
-function count_visible_down(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((i, 0)), -1)
-        neighbor < 0 && return i - 1
-        neighbor >= height && return i
-        i += 1
-    end
-    true
-end
-
-function count_visible_left(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((0, -i)), -1)
-        neighbor < 0 && return i - 1
-        neighbor >= height && return i
-        i += 1
-    end
-    true
-end
-
-function count_visible_right(treemap, point, height)
-    i = 1
-    while true
-        neighbor = get(trees, point + CartesianIndex((0, i)), -1)
-        neighbor < 0 && return i - 1
-        neighbor >= height && return i
-        i += 1
-    end
-    true
-end
-
-trees = parse(TreeMap, readlines(IOBuffer(example)))
-
-trees = parse(TreeMap, readlines(input))
-
-find_visible_trees(trees)
-
-maximum(find_scenic_score(tree, trees) for tree in trees)

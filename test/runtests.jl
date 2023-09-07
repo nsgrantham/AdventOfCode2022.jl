@@ -1,6 +1,7 @@
 using AdventOfCode2022
 using Test
 
+
 @testset "Day 1" begin
     example = IOBuffer(
         """
@@ -23,6 +24,7 @@ using Test
     @test AdventOfCode2022.Day1.solve(example) == (24000, 45000)
 end
 
+
 @testset "Day 2" begin
     example = IOBuffer(
         """
@@ -33,6 +35,7 @@ end
     )
     @test AdventOfCode2022.Day2.solve(example) == (15, 12)
 end
+
 
 @testset "Day 3" begin
     example = IOBuffer(
@@ -48,6 +51,7 @@ end
     @test AdventOfCode2022.Day3.solve(example) == (157, 70)
 end
 
+
 @testset "Day 4" begin
     example = IOBuffer(
         """
@@ -61,6 +65,7 @@ end
     )
     @test AdventOfCode2022.Day4.solve(example) == (2, 4)
 end
+
 
 @testset "Day 5" begin
     example = IOBuffer(
@@ -79,6 +84,7 @@ move 1 from 1 to 2
     @test AdventOfCode2022.Day5.solve(example) == ("CMZ", "MCD")
 end
 
+
 @testset "Day 6" begin
     example1 = "mjqjpqmgbljsphdztnvjfqwrcgsmlb"
     example2 = "bvwbjplbgvbhsrlpgdmjqwftvncz"
@@ -92,6 +98,7 @@ end
     @test AdventOfCode2022.Day6.solve(IOBuffer(example4)) == (10, 29)
     @test AdventOfCode2022.Day6.solve(IOBuffer(example5)) == (11, 26)
 end
+
 
 @testset "Day 7" begin
     example = """
@@ -122,6 +129,19 @@ end
     @test AdventOfCode2022.Day7.solve(IOBuffer(example)) == (95437, 24933642)
 end
 
+
+@testset "Day 8" begin
+    example = """
+30373
+25512
+65332
+33549
+35390
+"""
+    @test AdventOfCode2022.Day8.solve(IOBuffer(example)) == (21, 8)
+end
+
+  
 @testset "Day 9" begin
     example1 = """
 R 4
@@ -144,6 +164,7 @@ U 20"""
     @test AdventOfCode2022.Day9.solve(IOBuffer(example1)) == (13, 1)
     @test AdventOfCode2022.Day9.solve(IOBuffer(example2)) == (88, 36)
 end
+
 
 @testset "Day 10" begin
     example = """
@@ -305,6 +326,7 @@ noop
     @test AdventOfCode2022.Day10.solve(IOBuffer(example)) == (13140, image)
 end
 
+
 @testset "Day 11" begin
     example = """Monkey 0:
   Starting items: 79, 98
@@ -336,6 +358,7 @@ Monkey 3:
     @test AdventOfCode2022.Day11.solve(IOBuffer(example)) == (10605, 2713310158)
 end
 
+
 @testset "Day 13" begin
     example = """
 [1,1,3,1,1]
@@ -364,6 +387,7 @@ end
     @test AdventOfCode2022.Day13.solve(IOBuffer(example)) == (13, 140)
 end
 
+
 @testset "Day 14" begin
     example = """
 498,4 -> 498,6 -> 496,6
@@ -371,6 +395,7 @@ end
 """
     @test AdventOfCode2022.Day14.solve(IOBuffer(example)) == (24, 93)
 end
+
 
 @testset "Day 15" begin
     example = """Sensor at x=2, y=18: closest beacon is at x=-2, y=15
